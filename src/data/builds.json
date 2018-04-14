@@ -1,0 +1,96 @@
+[{
+        "classe": "pike",
+        "sigla": "ps",
+        "msg": "Build para Pike:",
+        "forca": "2068",
+        "inteligencia": "33",
+        "talento": "90",
+        "agilidade": "33",
+        "vitalidade": "20",
+        "autor": "RakaBR!"
+    },
+
+    {
+        "classe": "sacer",
+        "sigla": "prs",
+        "msg": "Build para Sacerdotisa:",
+        "forca": "120",
+        "inteligencia": "500",
+        "talento": "90",
+        "agilidade": "33",
+        "vitalidade": "1501",
+        "autor": "SuicideSheep!"
+    },
+
+    {
+        "classe": "mago",
+        "sigla": "mg",
+        "msg": "Build para Mago:",
+        "forca": "120",
+        "inteligencia": "2000",
+        "talento": "90",
+        "agilidade": "33",
+        "vitalidade": "01",
+        "autor": "SuicideSheep!"
+    },
+
+    {
+        "classe": "mech",
+        "sigla": "ms",
+        "msg": "Build para Mecânico:",
+        "forca": "2087",
+        "inteligencia": "33",
+        "talento": "90",
+        "agilidade": "33",
+        "vitalidade": "01",
+        "autor": "SuicideSheep!"
+    },
+
+    {
+        "classe": "kina",
+        "sigla": "ks",
+        "msg": "Build para Cavaleiro:",
+        "forca": "2053",
+        "inteligencia": "36",
+        "talento": "120",
+        "agilidade": "34",
+        "vitalidade": "01",
+        "autor": "xKronnos!"
+    },
+
+    {
+        "classe": "archer",
+        "sigla": "as",
+        "msg": "Build para Arqueira:",
+        "forca": "66",
+        "inteligencia": "36",
+        "talento": "90",
+        "agilidade": "2051",
+        "vitalidade": "01",
+        "autor": "SumpBR!"
+    },
+
+    {
+        "classe": "atalanta",
+        "sigla": "ata",
+        "msg": "Build para Atalanta:",
+        "forca": "66",
+        "inteligencia": "36",
+        "talento": "90",
+        "agilidade": "2051",
+        "vitalidade": "01",
+        "autor": "SumpBR!"
+    },
+
+    {
+        "classe": "lutador",
+        "sigla": "fs",
+        "msg": "Build para Lutador:",
+        "forca": "2083",
+        "inteligencia": "36",
+        "talento": "90",
+        "agilidade": "34",
+        "vitalidade": "01",
+        "autor": "SpawKillFs-RvG!"
+    }
+]

@@ -1,0 +1,29 @@
+{
+  "name": "mpk-bot",
+  "version": "1.0.0",
+  "description": "Bot para discord monsterpk.com",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rodrigogons/mpk-bot.git"
+  },
+  "keywords": [
+    "monsterpk",
+    "priston"
+  ],
+  "author": "rodrigogons",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rodrigogons/mpk-bot/issues"
+  },
+  "homepage": "https://github.com/rodrigogons/mpk-bot#readme",
+  "dependencies": {
+    "discord.js": "^11.3.2",
+    "nodemon": "^1.17.3",
+    "request": "^2.85.0"
+  }
+}
