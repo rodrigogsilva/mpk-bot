@@ -26,26 +26,30 @@ class Acoes {
      * @param {Mensagem} msg: Objeto da mensagem recebida
      */
     build(msg) {
-        let listBuilds = require('./../data/builds.json');
-        // TODO - pensar em uma forma de adicionar varias builds para uma mesma classe permitindo que 
-        let response = listBuilds.map(build => {
-            let classe = msg.content.toLocaleLowerCase().split(' ')[1];
-            let resp = "";
-            if (build.classe == classe || build.sigla == classe) {
-                resp += '\n\n' +
-                    build.msg +
-                    '\nForça:             ' + build.forca +
-                    '\nInteligência:  ' + build.inteligencia +
-                    '\nTalento:         ' + build.talento +
-                    '\nAgilidade:      ' + build.agilidade +
-                    '\nVitalidade:    ' + build.vitalidade +
-                    '\nBuild disponibilizada por ' + build.autor;
+        let builds = require('./../data/builds.json');
+        let classe = msg.content.toLocaleLowerCase().split(' ')[1];
+        let response = '';
+        // TODO - pensar em uma forma de adicionar varias builds para
+        // uma mesma classe permitindo que 
+        for(let i = 0; i < builds.length; i++){
+            if (builds[i].classe == classe || builds[i].sigla == classe) {
+                response += '\n\n' +
+                    builds[i].msg +
+                    '\nForça:             ' + builds[i].forca +
+                    '\nInteligência:  ' + builds[i].inteligencia +
+                    '\nTalento:         ' + builds[i].talento +
+                    '\nAgilidade:      ' + builds[i].agilidade +
+                    '\nVitalidade:    ' + builds[i].vitalidade +
+                    '\nBuild disponibilizada por ' + builds[i].autor;
+            } 
+        }
 
-                    return resp;
-                }
-            });
-
-        msg.author.sendMessage(response);
+        if (response == '') {
+            msg.reply('Informe a classe que você quer saber a build ' +
+                '(archer, atalanta, kina, lutador, mago, mech, pike ou sacer)');
+        } else{
+            msg.author.send(response);
+        }
     }
 
 
@@ -131,13 +135,11 @@ class Acoes {
             let rank = (((i + 1) < 10) ? ' ' + (i + 1) : (i + 1));
             // TODO - descobrir uma forma de alinha isso no discord
             let spacing = ' '.repeat((17 - nicks[i].length) * 2);
-            console.log(spacing.length);
 
             res += '\n   ' + rank + '   ' + nicks[i] + spacing + kills[i];
         }
 
         res += line;
-        console.log(res);
 
         return res;
     }
