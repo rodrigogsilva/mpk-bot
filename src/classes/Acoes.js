@@ -27,11 +27,12 @@ class Acoes {
      */
     build(msg) {
         let listBuilds = require('./../data/builds.json');
+        // TODO - pensar em uma forma de adicionar varias builds para uma mesma classe permitindo que 
         let response = listBuilds.map(build => {
             let classe = msg.content.toLocaleLowerCase().split(' ')[1];
             let resp = "";
             if (build.classe == classe || build.sigla == classe) {
-                resp +=
+                resp += '\n\n' +
                     build.msg +
                     '\nForça:             ' + build.forca +
                     '\nInteligência:  ' + build.inteligencia +
@@ -40,9 +41,9 @@ class Acoes {
                     '\nVitalidade:    ' + build.vitalidade +
                     '\nBuild disponibilizada por ' + build.autor;
 
-                return resp;
-            }
-        });
+                    return resp;
+                }
+            });
 
         msg.author.sendMessage(response);
     }
