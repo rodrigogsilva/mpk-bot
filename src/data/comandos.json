@@ -1,5 +1,5 @@
 {
-    "prefix": "!",
+    "prefix": ".",
     "comandos": [
         "ajuda", "build", "rank"
     ]

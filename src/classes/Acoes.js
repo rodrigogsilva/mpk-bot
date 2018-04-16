@@ -1,9 +1,28 @@
 /**
- * @author Rodrigo Silva
+ * @author Rodrigo Gonçalves
  * @description Classe responsavel pela execução de todos os comandos
  * aceitos pelo bot
  */
 class Acoes {
+
+    /**
+     * @description Um logger simples que imprime no terminal ações
+     * realizadas pelo bot
+     * @param {String} log Messagem a ser mostrada no terminal
+     */
+    logger(log) {
+        let data = new Date();
+        let dia = this._doisdig(data.getDate());
+        let mes = this._doisdig(data.getMonth() + 1);
+        let ano = this._doisdig(data.getFullYear());
+        let hora = this._doisdig(data.getHours());
+        let min = this._doisdig(data.getMinutes());
+        let sec = this._doisdig(data.getSeconds());
+
+        let output = `[ ${dia}-${mes}-${ano} | ${hora}:${min}:${sec} ] ${log}`;
+
+        console.log(output);
+    }
 
     /**
      * @description Retorna todos os comandos aceitos pelo bot
@@ -31,7 +50,7 @@ class Acoes {
         let response = '';
         // TODO - pensar em uma forma de adicionar varias builds para
         // uma mesma classe permitindo que 
-        for(let i = 0; i < builds.length; i++){
+        for (let i = 0; i < builds.length; i++) {
             if (builds[i].classe == classe || builds[i].sigla == classe) {
                 response += '\n\n' +
                     builds[i].msg +
@@ -41,13 +60,13 @@ class Acoes {
                     '\nAgilidade:      ' + builds[i].agilidade +
                     '\nVitalidade:    ' + builds[i].vitalidade +
                     '\nBuild disponibilizada por ' + builds[i].autor;
-            } 
+            }
         }
 
         if (response == '') {
             msg.reply('Informe a classe que você quer saber a build ' +
                 '(archer, atalanta, kina, lutador, mago, mech, pike ou sacer)');
-        } else{
+        } else {
             msg.author.send(response);
         }
     }
@@ -136,12 +155,21 @@ class Acoes {
             // TODO - descobrir uma forma de alinha isso no discord
             let spacing = ' '.repeat((17 - nicks[i].length) * 2);
 
-            res += '\n   ' + rank + '   ' + nicks[i] + spacing + kills[i];
+            res += '\n|  ' + rank + '   ' + nicks[i] + spacing + kills[i] + ' |';
         }
 
         res += line;
 
         return res;
+    }
+
+    /**
+     * @description Caso o numero informado seja menor que 10,
+     * retorna o numero com um 0 (zero) a esquerda
+     * @param {number} num numero a ser configurado
+     */
+    _doisdig(num){
+        return (num < 10) ? '0' + num : num;
     }
 }
 

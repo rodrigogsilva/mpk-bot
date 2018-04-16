@@ -6,7 +6,7 @@
 const Discord = require('discord.js');
 const Bot = new Discord.Client();
 const Acoes = require('./src/classes/Acoes.js');
-const acoes = new Acoes();
+const a = new Acoes();
 // TODO - forma mais eficiente para buscar comandos
 const {
     prefix,
@@ -14,9 +14,8 @@ const {
 } = require('./src/data/comandos.json');
 const token = require('./src/data/token.json');
 
-
 Bot.on('ready', () => {
-    console.log(`Iniciando >>> ${Bot.user.tag} id: ${Bot.user.id} <<<`);
+    a.logger(`Iniciando >>> ${Bot.user.tag} id: ${Bot.user.id} <<<`);
 });
 
 
@@ -24,11 +23,14 @@ Bot.on('message', message => {
     let cont = message.content.toLocaleLowerCase();
     if (cont.startsWith(prefix)) {
         if (cont.startsWith(prefix + 'ajuda')) {
-            acoes.ajuda(message, prefix, comandos);
+           a.logger(`Comando ajuda chamdo por ${message.author.username}`); 
+            a.ajuda(message, prefix, comandos);
         } else if (cont.startsWith(prefix + 'build')) {
-            acoes.build(message);
+            a.logger(`Comando build chamdo por ${message.author.username}`);
+            a.build(message);
         } else if (cont.startsWith(prefix + 'rank')) {
-            acoes.ranking(message);
+            a.logger(`Comando rank chamdo por ${message.author.username}`); 
+            a.ranking(message);
         }
     }
 });
