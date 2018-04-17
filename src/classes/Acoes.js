@@ -73,29 +73,21 @@ class Acoes {
 
 
     /**
-     * @description Organiza os 10 primeiros do rank pvp e retorna em uma 
-     * tabela estilizada
+     * @description recebe html com o rank, busca os 10 primeiros do rank
+     * e gera uma tabela contendo nick e número de kills
      * @param {Mensagem} msg: Objeto da mensagem recebida
      */
     ranking(msg) {
-        const htmlBruto = this._getHtmlRanking();
-        let dados = this._limpaRanking(htmlBruto);
-        let tabelaRank = this._montaTabelaRanking(dados);
-
-        msg.reply(tabelaRank);
-    }
-
-
-    /**
-     * @description Acessa o ranking na pagina do monster pk e retorna
-     * o html bruto da pagina
-     * @returns {string} resp Contem todo o html da pagina de rank
-     */
-    _getHtmlRanking() {
-        const afterLoad = require('after-load');
+        const request = require('request');
         const uri = 'http://user.monsterpk.com.br/scriptsnovosite/rankbp.php';
 
-        return afterLoad(uri);
+        request(uri, (error, response, body) => {
+            let dados = this._limpaRanking(body);
+            let tabelaRank = this._montaTabelaRanking(dados);
+
+            msg.reply(tabelaRank);
+            //console.log(tabelaRank);
+        });
     }
 
 
@@ -139,23 +131,23 @@ class Acoes {
      * @returns {string} res Tabela dos 10 primeiros do ranking
      */
     _montaTabelaRanking(dados) {
-        const line = '\n' + '-'.repeat(33);
+        const line = '\n' + '-'.repeat(36);
         const nicks = dados[0];
         const kills = dados[1];
 
         let res = line;
-        let space = ' '.repeat(8);
+        let space = ' '.repeat(10);
         res += '\n|' + space + 'MESTRES DO PVP' + space + ' |';
         res += line;
-        res += '\n|  Posi' + space + 'Nick' + space + space + 'Kills' + ' |';
+        res += '\n|  Posi' + space + 'Nick' + space + 'Kills' +space+ '|';
         res += line;
 
         for (let i = 0; i < 10; i++) {
             let rank = (((i + 1) < 10) ? ' ' + (i + 1) : (i + 1));
             // TODO - descobrir uma forma de alinha isso no discord
-            let spacing = ' '.repeat((17 - nicks[i].length) * 2);
+            let spacing = ' '.repeat((20 - nicks[i].length) * 2);
 
-            res += '\n|  ' + rank + '   ' + nicks[i] + spacing + kills[i] + ' |';
+            res += '\n|  ' + rank + '   ' + nicks[i] + spacing + kills[i];
         }
 
         res += line;
@@ -168,7 +160,7 @@ class Acoes {
      * retorna o numero com um 0 (zero) a esquerda
      * @param {number} num numero a ser configurado
      */
-    _doisdig(num){
+    _doisdig(num) {
         return (num < 10) ? '0' + num : num;
     }
 }
