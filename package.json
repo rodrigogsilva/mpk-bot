@@ -22,7 +22,6 @@
   },
   "homepage": "https://github.com/rodrigogons/mpk-bot#readme",
   "dependencies": {
-    "after-load": "^1.0.4",
     "discord.js": "^11.3.2",
     "nodemon": "^1.17.3",
     "request": "^2.85.0"
