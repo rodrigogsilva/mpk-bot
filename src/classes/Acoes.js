@@ -12,17 +12,18 @@ class Acoes {
      */
     logger(log) {
         let data = new Date();
-        let dia = this._doisdig(data.getDate());
-        let mes = this._doisdig(data.getMonth() + 1);
-        let ano = this._doisdig(data.getFullYear());
-        let hora = this._doisdig(data.getHours());
-        let min = this._doisdig(data.getMinutes());
-        let sec = this._doisdig(data.getSeconds());
+        let dia = this._dataZero(data.getDate());
+        let mes = this._dataZero(data.getMonth() + 1);
+        let ano = this._dataZero(data.getFullYear());
+        let hor = this._dataZero(data.getHours());
+        let min = this._dataZero(data.getMinutes());
+        let sec = this._dataZero(data.getSeconds());
 
-        let output = `[ ${dia}-${mes}-${ano} | ${hora}:${min}:${sec} ] ${log}`;
+        let output = `[ ${dia}-${mes}-${ano} | ${hor}:${min}:${sec} ] ${log}`;
 
         console.log(output);
     }
+
 
     /**
      * @description Retorna todos os comandos aceitos pelo bot
@@ -83,10 +84,10 @@ class Acoes {
 
         request(uri, (error, response, body) => {
             let dados = this._limpaRanking(body);
+
             let tabelaRank = this._montaTabelaRanking(dados);
 
             msg.reply(tabelaRank);
-            //console.log(tabelaRank);
         });
     }
 
@@ -96,71 +97,125 @@ class Acoes {
      * com o nick dos 10 primeros do ranking e outra com as respequitivas kills 
      * de cada jogador
      * @param {string} bruto string do html da pagina requisitada
-     * @returns {Array} res Array com 2 arrays, um contendo nick do jogador
-     * e outro com as kills desse jogador
+     * @returns {Array} res Array com 4 arrays, um contendo nick do jogador, as 
+     * kills desse jogador, as mortes e a quantidade de pontos
      */
     _limpaRanking(bruto) {
         let res = [];
         let nickLimpo = [];
         let killLimpo = [];
+        let deathLimpo = [];
+        let pointLimpo = [];
 
-        const nicksRE = /(?:td width="98".*>)(.+?)</ig
-        const killsRE = /(?:td width="60".*>)(.+?)(?:<)/ig
-
-        let nicks = bruto.match(nicksRE);
-        let kills = bruto.match(killsRE);
+        let nicks = bruto.match(/(?:td width="98".*>)(.+?)</ig);
+        let kills = bruto.match(/(?:td width="60".*>)(.+?)(?:<)/ig);
+        let deaths = bruto.match(/(?:td width="70".*>)(.+?)(?:<)/ig);
+        let points = bruto.match(/(?:td width="80".*>)(.+?)(?:<)/ig);
 
         for (let i = 0; i < 10; i++) {
             let ni = nicks[i].match(/>(.*?)</ig)[0].slice(1, -1);
             let ki = kills[i].match(/>(.*?)</ig)[0].slice(1, -1);
+            let de = deaths[i].match(/>(.*?)</ig)[0].slice(1, -1);
+            let po = points[i].match(/>(.*?)</ig)[0].slice(1, -1);
+
             nickLimpo.push(ni);
             killLimpo.push(ki);
+            deathLimpo.push(de);
+            pointLimpo.push(po);
         }
 
         res.push(nickLimpo);
         res.push(killLimpo);
+        res.push(deathLimpo);
+        res.push(pointLimpo);
 
         return res;
     }
+
 
     /**
      * @description recebe o nick e as kills dos 10 primeiro jogadores 
      * e cria uma tabela estilizada com essas informações
-     * @param {Array} dados array com 2 arrays um contendo 10 nicks e outro, as 
-     * kills dos jogadores respequitivamente
+     * @param {Array} dados Array com 4 arrays, um contendo nick do
+     * jogador, as kills desse jogador, as mortes e a quantidade de pontos
      * @returns {string} res Tabela dos 10 primeiros do ranking
      */
     _montaTabelaRanking(dados) {
-        const line = '\n' + '-'.repeat(36);
         const nicks = dados[0];
         const kills = dados[1];
+        const death = dados[2];
+        const points = dados[3];
 
-        let res = line;
-        let space = ' '.repeat(10);
-        res += '\n|' + space + 'MESTRES DO PVP' + space + ' |';
-        res += line;
-        res += '\n|  Posi' + space + 'Nick' + space + 'Kills' +space+ '|';
-        res += line;
+        let ranking = '\`\`\`\n' +
+            '╔══════════════════════════════════════════════════════════╗\n' +
+            '║                      MESTRES DO PVP                      ║\n' +
+            '╠═════════╦══════════════════════╦═══════╦════════╦════════╣\n' +
+            '║ Posição ║         Nick         ║ Kills ║ Mortes ║ Pontos ║\n' +
+            '╠═════════╬══════════════════════╬═══════╬════════╬════════╣\n'
 
         for (let i = 0; i < 10; i++) {
-            let rank = (((i + 1) < 10) ? ' ' + (i + 1) : (i + 1));
-            // TODO - descobrir uma forma de alinha isso no discord
-            let spacing = ' '.repeat((20 - nicks[i].length) * 2);
 
-            res += '\n|  ' + rank + '   ' + nicks[i] + spacing + kills[i];
+            let rank = '   ' + this._addZero(i + 1, 2) + '   ';
+            let nick = this._center(nicks[i], 22)
+            let kill = ' ' + this._addZero(kills[i], 3) + '  ';
+            let deat = '  ' + this._addZero(death[i], 3) + '  ';
+            let pont = ' ' + this._addZero(points[i], 4) + '  ';
+
+            ranking += `║${rank}║${nick}║${kill}║${deat}║${pont}║\n`
         }
 
-        res += line;
+        ranking +=
+            '╚═════════╩══════════════════════╩═══════╩════════╩════════╝\n' +
+            '\`\`\`';
+
+        return ranking;
+    }
+
+    /**
+     * @description Centraliza uma palavra em uma certa quantidade de caracteres
+     * @param {String} word palavra a ser centralizada
+     * @param {int} size tamanho total para centralizar a palavra
+     * @returns {String} res espaço $word espaço
+     */
+    _center(word, size) {
+        let res = '';
+        let val = size - word.length;
+        let space = Math.floor(val / 2);
+
+        res += (val % 2 != 0) ? ' ' : '';
+        res += ' '.repeat(space) + word + ' '.repeat(space);
 
         return res;
     }
 
+
     /**
-     * @description Caso o numero informado seja menor que 10,
-     * retorna o numero com um 0 (zero) a esquerda
-     * @param {number} num numero a ser configurado
+     * @description Adiciona 0's a esquerda o valor fornecido para igualar
+     * ao tamanho desejado
+     * @param {int} val valor a ser validado
+     * @param {int} size tamanho que valor deveria ter
+     * @returns {String} res valor adaptado ou não
      */
-    _doisdig(num) {
+    _addZero(val, size) {
+        let minus = ' ';
+        if (val < 0) {
+            minus = '-';
+            val = Math.abs(val);
+        }
+
+        let res = '' + val;
+        if (res.length < size) {
+            res = '0'.repeat(size - res.length) + res;
+        }
+        return minus + res
+    }
+
+    /**
+     * @description Similar a _addZero mas somente retorna 2 digitos
+     * @param {int} num valor a ser editado
+     * @returns 0n ou n
+     */
+    _dataZero(num) {
         return (num < 10) ? '0' + num : num;
     }
 }
