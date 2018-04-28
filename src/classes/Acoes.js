@@ -1,3 +1,5 @@
+const request = require('request');
+
 /**
  * @author Rodrigo Gonçalves
  * @description Classe responsavel pela execução de todos os comandos
@@ -79,7 +81,6 @@ class Acoes {
      * @param {Mensagem} msg: Objeto da mensagem recebida
      */
     ranking(msg) {
-        const request = require('request');
         const uri = 'http://user.monsterpk.com.br/scriptsnovosite/rankbp.php';
 
         request(uri, (error, response, body) => {
@@ -89,6 +90,52 @@ class Acoes {
 
             msg.reply(tabelaRank);
         });
+    }
+
+
+    /**
+     * @description Função paleativa para mostrar ranking individual. Será 
+     * refatorada quando eu não tiver mais o que fazer :v
+     * @param {Mensagem} msg: Objeto da mensagem recebida
+     */
+    rankIndividual(msg) {
+        let uri = 'http://user.monsterpk.com.br/scriptsnovosite/rankbp.php';
+        let nick = msg.content.toLocaleLowerCase().split(" ")[1];
+        uri += '?nick=' + nick;
+
+        // TODO - Refatorar essa função para utilizar as funções de ranking
+        let a = request(uri, (error, response, body) => {
+            let nickL = body.match(/(?:td width="98".*>)(.+?)</ig)
+
+            if (!nickL) {
+                msg.reply('Não encontrei seu nick :/');
+                return;
+            }
+
+            nickL = nickL[0].match(/>(.*?)</ig)[0].slice(1, -1);
+            let killL = body.match(/(?:td width="60".*>)(.+?)(?:<)/ig)[0]
+                .match(/>(.*?)</ig)[0].slice(1, -1);
+            let deathL = body.match(/(?:td width="70".*>)(.+?)(?:<)/ig)[0]
+                .match(/>(.*?)</ig)[0].slice(1, -1);
+            let pointsL = body.match(/(?:td width="80".*>)(.+?)(?:<)/ig)[0]
+                .match(/>(.*?)</ig)[0].slice(1, -1);
+
+            let nick = this._center(nickL, 22)
+            let kill = ' ' + this._addZero(killL, 3) + '  ';
+            let deat = '  ' + this._addZero(deathL, 3) + '  ';
+            let pont = ' ' + this._addZero(pointsL, 4) + '  ';
+
+            let ranking = '\`\`\`\n' +
+                '╔══════════════════════╦═══════╦════════╦════════╗\n' +
+                '║         Nick         ║ Kills ║ Mortes ║ Pontos ║\n' +
+                '╠══════════════════════╬═══════╬════════╬════════╣\n' +
+                `║${nick}║${kill}║${deat}║${pont}║\n` +
+                '╚══════════════════════╩═══════╩════════╩════════╝\n' +
+                '\`\`\`';
+
+            msg.reply(ranking);
+        });
+
     }
 
 
