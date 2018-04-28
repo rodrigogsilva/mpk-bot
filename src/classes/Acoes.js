@@ -45,7 +45,7 @@ class Acoes {
 
     /**
      * @description Coleta as informações de uma build
-     * @param {Mensagem} msg: Objeto da mensagem recebida
+     * @param {Mensagem} msg Objeto da mensagem recebida
      */
     build(msg) {
         let builds = require('./../data/builds.json');
@@ -78,7 +78,7 @@ class Acoes {
     /**
      * @description recebe html com o rank, busca os 10 primeiros do rank
      * e gera uma tabela contendo nick e número de kills
-     * @param {Mensagem} msg: Objeto da mensagem recebida
+     * @param {Mensagem} msg Objeto da mensagem recebida
      */
     ranking(msg) {
         const uri = 'http://user.monsterpk.com.br/scriptsnovosite/rankbp.php';
@@ -96,7 +96,7 @@ class Acoes {
     /**
      * @description Função paleativa para mostrar ranking individual. Será 
      * refatorada quando eu não tiver mais o que fazer :v
-     * @param {Mensagem} msg: Objeto da mensagem recebida
+     * @param {Mensagem} msg Objeto da mensagem recebida
      */
     rankIndividual(msg) {
         let uri = 'http://user.monsterpk.com.br/scriptsnovosite/rankbp.php';
@@ -144,7 +144,7 @@ class Acoes {
      * com o nick dos 10 primeros do ranking e outra com as respequitivas kills 
      * de cada jogador
      * @param {string} bruto string do html da pagina requisitada
-     * @returns {Array} res Array com 4 arrays, um contendo nick do jogador, as 
+     * @returns {Array} Array com 4 arrays, um contendo nick do jogador, as 
      * kills desse jogador, as mortes e a quantidade de pontos
      */
     _limpaRanking(bruto) {
@@ -185,7 +185,7 @@ class Acoes {
      * e cria uma tabela estilizada com essas informações
      * @param {Array} dados Array com 4 arrays, um contendo nick do
      * jogador, as kills desse jogador, as mortes e a quantidade de pontos
-     * @returns {string} res Tabela dos 10 primeiros do ranking
+     * @returns {string} Tabela dos 10 primeiros do ranking
      */
     _montaTabelaRanking(dados) {
         const nicks = dados[0];
@@ -222,7 +222,7 @@ class Acoes {
      * @description Centraliza uma palavra em uma certa quantidade de caracteres
      * @param {String} word palavra a ser centralizada
      * @param {int} size tamanho total para centralizar a palavra
-     * @returns {String} res espaço $word espaço
+     * @returns {String} espaço $word espaço
      */
     _center(word, size) {
         let res = '';
@@ -237,11 +237,11 @@ class Acoes {
 
 
     /**
-     * @description Adiciona 0's a esquerda o valor fornecido para igualar
+     * @description Adiciona 0's a esquerda do valor fornecido para igualar
      * ao tamanho desejado
      * @param {int} val valor a ser validado
      * @param {int} size tamanho que valor deveria ter
-     * @returns {String} res valor adaptado ou não
+     * @returns {String} valor adaptado ou não
      */
     _addZero(val, size) {
         let minus = ' ';
@@ -258,7 +258,7 @@ class Acoes {
     }
 
     /**
-     * @description Similar a _addZero mas somente retorna 2 digitos
+     * @description Adiciona 0 a esquerda do valor fornecido para ter 2 digitos
      * @param {int} num valor a ser editado
      * @returns 0n ou n
      */
