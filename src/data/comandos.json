@@ -1,6 +1,4 @@
 {
-    "prefix": ".",
-    "comandos": [
-        "ajuda", "build", "rank"
-    ]
+  "prefix": ".",
+  "comandos": ["ajuda", "build", "rank", "news"]
 }
