@@ -1,4 +1,5 @@
 const request = require("request");
+const token = require("../data/token.json");
 
 /**
  * @author Rodrigo Gonçalves
@@ -148,22 +149,30 @@ class Acoes {
     });
   }
 
+  /**
+   * coleta uma mensagem aleatória de newsapi.org e responde o chat com
+   * o tiltulo, autor e o link para a noticia
+   * @param {Object} msg objeto do discord para retornar a mensagem
+   */
   pegaNoticia(msg) {
-    const urlNoticias =
-      "https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty";
+    const data = new Date();
+    data.setDate(data.getDate() - 20);
+    const dataConv = this._formataDate(data);
+    const urlNoticias = `https://newsapi.org/v2/top-headlines?country=br&category=technology&from=${dataConv}&sortBy=publishedAt&apiKey=${token.api}`;
     request(urlNoticias, (error, response, body) => {
+      let retorno;
       body = JSON.parse(body);
-      this.logger(`Noticias : ${body}`);
-      const codigoNoticia = body[Math.floor(Math.random() * body.length)];
-      const urlNoticia = `https://hacker-news.firebaseio.com/v0/item/${codigoNoticia}.json?print=pretty`;
-      this.logger(`Noticia escolhida : ${urlNoticia}`);
 
-      request(urlNoticia, (error, response, body) => {
-        body = JSON.parse(body);
-
-        const noticia = `\nTitulo: ${body.title}\nPor: ${body.by}\nLink: ${body.url}`;
-        msg.reply(noticia);
-      });
+      if (body.status.toUpperCase() !== "OK" || !body.articles.length) {
+        retorno = "Não encontrei uma noticia :/";
+      } else {
+        // escolhe uma noticia aleatória
+        const noticia =
+          body.articles[Math.floor(Math.random() * body.articles.length)];
+        this.logger(`Noticia : ${JSON.stringify(noticia.url)}`);
+        retorno = `\nTitulo: ${noticia.title}\nPor: ${noticia.author}\nLink: ${noticia.url}`;
+      }
+      msg.reply(retorno);
     });
   }
 
@@ -289,6 +298,22 @@ class Acoes {
    */
   _dataZero(num) {
     return num < 10 ? "0" + num : num;
+  }
+
+  /**
+   * Converte objeto Date para yyyy-mm-dd
+   * @param {Date} date data que será mudada
+   */
+  _formataDate(date) {
+    var d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [year, month, day].join("-");
   }
 }
 

@@ -39,4 +39,4 @@ Bot.on("message", message => {
   }
 });
 
-Bot.login(token.token);
+Bot.login(token.discord);
