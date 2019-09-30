@@ -152,10 +152,16 @@ class Acoes {
     const urlNoticias =
       "https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty";
     request(urlNoticias, (error, response, body) => {
+      body = JSON.parse(body);
+      this.logger(`Noticias : ${body}`);
       const codigoNoticia = body[Math.floor(Math.random() * body.length)];
       const urlNoticia = `https://hacker-news.firebaseio.com/v0/item/${codigoNoticia}.json?print=pretty`;
+      this.logger(`Noticia escolhida : ${urlNoticia}`);
+
       request(urlNoticia, (error, response, body) => {
-        const noticia = `Titulo: ${body.title}\nPor: ${body.by}\nLink: ${body.url}`;
+        body = JSON.parse(body);
+
+        const noticia = `\nTitulo: ${body.title}\nPor: ${body.by}\nLink: ${body.url}`;
         msg.reply(noticia);
       });
     });

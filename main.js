@@ -6,36 +6,36 @@
 const Discord = require("discord.js");
 const Bot = new Discord.Client();
 const Acoes = require("./src/classes/Acoes.js");
-const a = new Acoes();
+const acao = new Acoes();
 // TODO - forma mais eficiente para buscar comandos
 const { prefix, comandos } = require("./src/data/comandos.json");
 const token = require("./src/data/token.json");
 
 Bot.on("ready", () => {
-  a.logger(`Iniciando >>> ${Bot.user.tag} id: ${Bot.user.id} <<<`);
+  acao.logger(`Iniciando >>> ${Bot.user.tag} id: ${Bot.user.id} <<<`);
 });
 
 Bot.on("message", message => {
   let cont = message.content.toLocaleLowerCase();
   if (cont.startsWith(prefix)) {
     if (cont.startsWith(prefix + "ajuda")) {
-      a.logger(`Comando ajuda chamdo por ${message.author.username}`);
-      a.ajuda(message, prefix, comandos);
+      acao.logger(`Comando ajuda chamdo por ${message.author.username}`);
+      acao.ajuda(message, prefix, comandos);
     } else if (cont.startsWith(prefix + "build")) {
-      a.logger(`Comando build chamdo por ${message.author.username}`);
-      a.build(message);
+      acao.logger(`Comando build chamdo por ${message.author.username}`);
+      acao.build(message);
     } else if (cont.startsWith(prefix + "rank")) {
       if (cont.split(" ")[1]) {
-        a.logger(`Comando rank chamdo por ${message.author.username}`);
-        a.rankIndividual(message);
+        acao.logger(`Comando rank chamdo por ${message.author.username}`);
+        acao.rankIndividual(message);
       } else {
-        a.logger(`Comando rank chamdo por ${message.author.username}`);
-        a.ranking(message);
+        acao.logger(`Comando rank chamdo por ${message.author.username}`);
+        acao.ranking(message);
       }
+    } else if (cont.startsWith(prefix + "news")) {
+      acao.logger(`Comando news chamdo por ${message.author.username}`);
+      acao.pegaNoticia(message);
     }
-  } else if (cont.startsWith(prefix + "news")) {
-    a.logger(`Comando news chamdo por ${message.author.username}`);
-    a.pegaNoticia(message);
   }
 });
 
